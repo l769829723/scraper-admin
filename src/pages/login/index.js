@@ -17,10 +17,6 @@ const useStyles = makeStyles((theme) => ({
     width: "100vw",
     height: "100vh",
   },
-  logo: {},
-  loginPanl: {
-    backdropFilter: "blur(5px)",
-  },
 }));
 
 const LoginPage = ({ setContext }) => {
