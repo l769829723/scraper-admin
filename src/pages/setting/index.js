@@ -10,10 +10,10 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import * as View from "../views";
-import Action from "../store/action";
-import * as Api from "../api";
-import { Header } from "../components";
+import * as View from "../../views";
+import Action from "../../store/action";
+import { Card, Header } from "../../components";
+import * as request from "./request";
 
 const SettingPage = ({ context, setContext }) => {
   const [host, setHost] = React.useState("localhost");
@@ -21,7 +21,7 @@ const SettingPage = ({ context, setContext }) => {
   const schemaOptions = ["http", "https"];
   const navigate = useNavigate();
 
-  const { status, message, loading } = Api.useDetection();
+  const config = request.useAppConfig();
 
   const handleChangeSchema = ({ target }) => {
     setSchema(target.value);
@@ -43,9 +43,13 @@ const SettingPage = ({ context, setContext }) => {
     }
   }, [context]);
 
+  React.useEffect(() => {
+    config.get();
+  }, []);
+
   return (
     <View.AppLayout pageId='Setting'>
-      {status === "ERROR" ? <Alert severity='error'>{message}</Alert> : null}
+      {/* {status === "ERROR" ? <Alert severity='error'>{message}</Alert> : null} */}
       <Grid container>
         <Grid item xs={12}>
           <Header.MainTitle title='更新接口地址' />
@@ -85,11 +89,7 @@ const SettingPage = ({ context, setContext }) => {
                 </Grid>
                 <Grid xs={12} md={1} item>
                   <Grid container justifyContent='flex-end'>
-                    <Button
-                      variant='contained'
-                      onClick={handleSaveConfig}
-                      disabled={loading}
-                    >
+                    <Button variant='contained' onClick={handleSaveConfig}>
                       Submit
                     </Button>
                   </Grid>
@@ -101,7 +101,7 @@ const SettingPage = ({ context, setContext }) => {
         <Grid item xs={12}>
           <Box pt={5}>
             <Header.MainTitle title='系统默认配置清单' />
-            111
+            <Card.Description items={config.data || {}} />
           </Box>
         </Grid>
       </Grid>
