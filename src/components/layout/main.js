@@ -114,7 +114,7 @@ function MainLayout(props) {
             edge='start'
             color='inherit'
             aria-label='open drawer'
-            onClick={() => rest.handleClickMenu}
+            onClick={rest.handleClickMenu}
             className={clsx(
               classes.menuButton
               // open && classes.menuButtonHidden

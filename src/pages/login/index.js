@@ -11,6 +11,16 @@ import {
 } from "@mui/material";
 import Action from "./action";
 import { useNavigate } from "react-router-dom";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles((theme) => ({
+  background: {
+    position: "relative",
+  },
+  loginPanl: {
+    position: "absolute",
+  },
+}));
 
 const LoginPage = ({ setContext }) => {
   const navigate = useNavigate();

@@ -14,6 +14,7 @@ const Overview = ({
   pending,
   finished,
   onTabChange,
+  extra,
 }) => {
   const [tabKey, setTabKey] = React.useState("default");
 
@@ -32,28 +33,41 @@ const Overview = ({
 
   return (
     <Box>
-      <Box>
-        <Box py={1}>
-          <Typography variant='h5' color='text.secondary'>
-            <Box>{title}</Box>
-          </Typography>
-        </Box>
-        <Paper square>
-          <Tabs
-            value={tabKey}
-            indicatorColor='primary'
-            textColor='secondary'
-            onChange={handleToggleTab}
-          >
-            {projects?.map((tab) => (
-              <Tab key={`t-${tab}`} label={tab} value={tab} />
-            ))}
-            <Tab label='default' value='default' />
-          </Tabs>
-        </Paper>
-      </Box>
+      <Grid container>
+        <Grid item xs={12}>
+          <Grid container justifyContent='space-between' alignItems='center'>
+            <Grid item>
+              <Box py={1}>
+                <Typography variant='h5' color='text.primary'>
+                  <Box fontWeight={500}>{title}</Box>
+                </Typography>
+              </Box>
+            </Grid>
+            {extra && (
+              <Grid item>
+                <Box px={1}>{extra}</Box>
+              </Grid>
+            )}
+          </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper square>
+            <Tabs
+              value={tabKey}
+              indicatorColor='primary'
+              textColor='secondary'
+              onChange={handleToggleTab}
+            >
+              {projects?.map((tab) => (
+                <Tab key={`t-${tab}`} label={tab} value={tab} />
+              ))}
+              <Tab label='default' value='default' />
+            </Tabs>
+          </Paper>
+        </Grid>
+      </Grid>
       <Paper square elevation={1}>
-        <Box py={1} px={3}>
+        <Box p={3}>
           <Grid container spacing={2}>
             <Grid item xs={4}>
               <Typography
@@ -68,7 +82,7 @@ const Overview = ({
                 align='center'
                 variant='h4'
                 component='div'
-                color='text.secondary'
+                color='text.primary'
               >
                 <Box fontWeight={600}>
                   {running !== undefined
@@ -98,7 +112,7 @@ const Overview = ({
                 align='center'
                 variant='h4'
                 component='div'
-                color='text.secondary'
+                color='text.primary'
               >
                 <Box fontWeight={600}>
                   {pending !== undefined ? pending : "--"}
@@ -126,7 +140,7 @@ const Overview = ({
                 align='center'
                 variant='h4'
                 component='div'
-                color='text.secondary'
+                color='text.primary'
               >
                 <Box fontWeight={600}>
                   {finished !== undefined ? finished : "--"}

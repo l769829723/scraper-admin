@@ -12,7 +12,6 @@ import {
   TextField,
   Typography,
   TableContainer,
-  Divider,
 } from "@mui/material";
 
 function TablePlaceholder({ title, description }) {
@@ -38,18 +37,32 @@ function Datatable({
   description,
   headerButtons,
 }) {
+  const [searchValue, setSearchValue] = React.useState("");
+
+  const filteredRows = React.useMemo(() => {
+    if (rows && rows.length) {
+      if (searchValue !== "") {
+        return rows.filter((row) =>
+          JSON.stringify(row).toLowerCase().includes(searchValue.toLowerCase())
+        );
+      }
+      return rows;
+    }
+    return [];
+  }, [rows, searchValue]);
+
   return (
     <Box>
       <Grid container justifyContent='space-between'>
         <Grid item>
           {title ? (
-            <Typography variant='h5' color='text.secondary'>
+            <Typography variant='h5' color='text.primary'>
               <Box py={1}>{title}</Box>
             </Typography>
           ) : null}
         </Grid>
         <Grid item>
-          <Grid container alignItems='middle' spacing={2}>
+          <Grid container alignItems='flex-end' spacing={2}>
             <Grid item>
               <TextField
                 size='small'
@@ -57,6 +70,7 @@ function Datatable({
                 label='搜索'
                 variant='outlined'
                 placeholder='输入字符'
+                onChange={({ target }) => setSearchValue(target.value.trim())}
               />
             </Grid>
 
@@ -66,15 +80,13 @@ function Datatable({
       </Grid>
       <TableContainer component={Paper}>
         <Table>
-          {description ? (
-            <caption>A basic table example with a caption</caption>
-          ) : null}
+          {description ? <caption>{description}</caption> : null}
           <TableHead>
             <TableRow>
               {columns?.map((col, index) => (
                 <TableCell align='left' key={`col-${index}`}>
                   <Typography variant='body1' component='div'>
-                    <Box p={1} fontWeight={600} color='text.secondary'>
+                    <Box p={1} fontWeight={600} color='text.primary'>
                       {col.title}
                     </Box>
                   </Typography>
@@ -83,9 +95,9 @@ function Datatable({
             </TableRow>
           </TableHead>
           {!loading ? (
-            rows?.length ? (
+            filteredRows?.length ? (
               <TableBody>
-                {rows.map((row, rowIndex) => (
+                {filteredRows.map((row, rowIndex) => (
                   <TableRow key={`row-${rowIndex}`}>
                     {columns.map((col, colIndex) => (
                       <TableCell
@@ -93,13 +105,15 @@ function Datatable({
                         scope='row'
                         key={`row-${rowIndex}-col-${colIndex}`}
                       >
-                        <Typography variant='body2' component='div'>
-                          <Box p={1} fontWeight={500} color='text.secondary'>
-                            {!col.render
-                              ? row[col.index]
-                              : col.render(row[col?.index])}
-                          </Box>
-                        </Typography>
+                        {!col.render ? (
+                          <Typography variant='body2' component='div'>
+                            <Box p={1} fontWeight={500} color='text.primary'>
+                              {row[col.index]}
+                            </Box>
+                          </Typography>
+                        ) : (
+                          col.render(row[col?.index], row)
+                        )}
                       </TableCell>
                     ))}
                   </TableRow>

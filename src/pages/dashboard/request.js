@@ -64,3 +64,24 @@ export function useSummary() {
 
   return { get, ...state };
 }
+
+export function useLogOutput() {
+  const { perform, ...state } = useScraper();
+  const [{ api }] = Context.useContext();
+
+  const get = React.useCallback(async (project, category, id) => {
+    try {
+      await perform(
+        `${api.schema}://${api.host}/api/scrapy/logs?project=${project}&category=${category}&id=${id}`,
+        {
+          method: "GET",
+        },
+        (data) => data.data
+      );
+    } catch (error) {
+      console.error(error.message);
+    }
+  }, []);
+
+  return { get, ...state };
+}

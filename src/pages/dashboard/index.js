@@ -1,26 +1,31 @@
 import React from "react";
 import { Box, Grid, Button } from "@mui/material";
 import Overview from "./Overview";
-import Datatable from "./Datatable";
+import JobTable from "./JobTable";
 import * as config from "./config";
 import * as request from "./request";
 import * as View from "../../views";
+import { RefreshTwoTone } from "@mui/icons-material";
+import { Route, Routes } from "react-router-dom";
+import JobDetail from "./JobDetail";
 
 /**
  * TODO:
- * 1. auto refresh
- * 2. show logs
+ * 1. delete job
+ * 2. create job
  */
 
 const Dashboard = ({ context }) => {
   const status = request.useStatus();
   const projects = request.useProjects();
 
+  const [currentProject, setCurrentProject] = React.useState("default");
+
   const jobs = React.useMemo(() => {
     const records = [];
     const { running, pending, finished } = status.data || {};
     if (running && pending && finished) {
-      running?.foreach((job) => {
+      running?.forEach((job) => {
         records.push({
           id: job.id,
           category: job.spider,
@@ -28,7 +33,7 @@ const Dashboard = ({ context }) => {
           startAt: job.start_time,
         });
       });
-      pending?.foreach((job) => {
+      pending?.forEach((job) => {
         records.push({
           id: job.id,
           category: job.spider,
@@ -36,7 +41,7 @@ const Dashboard = ({ context }) => {
           startAt: job.start_time,
         });
       });
-      finished?.foreach((job) => {
+      finished?.forEach((job) => {
         records.push({
           id: job.id,
           category: job.spider,
@@ -50,17 +55,22 @@ const Dashboard = ({ context }) => {
 
   const handleTabChange = (value) => {
     if (projects.data && projects.data.length) {
+      setCurrentProject(value);
       status.get(value);
     }
   };
 
   React.useEffect(() => {
+    // 更新当前tab,并且获取数据
     if (projects.data && projects.data.length) {
-      handleTabChange(projects.data[0]);
+      const projectName = projects.data[0];
+      handleTabChange(projectName);
+      setCurrentProject(projectName);
     }
   }, [projects.data]);
 
   React.useEffect(() => {
+    // 初始化加载数据
     projects.get();
   }, []);
 
@@ -73,25 +83,42 @@ const Dashboard = ({ context }) => {
         pending={status?.data?.pending?.length}
         finished={status?.data?.finished?.length}
         onTabChange={handleTabChange}
+        extra={
+          <Button
+            size='small'
+            variant='outlined'
+            startIcon={<RefreshTwoTone />}
+            onClick={() => status.get(currentProject)}
+          >
+            Refresh
+          </Button>
+        }
       />
 
-      <Grid container>
-        <Grid item xs={12}>
-          <Box pt={5} pb={1}>
-            <Datatable
-              title='任务列表'
-              loading={status.loading}
-              rows={jobs}
-              columns={config.columns}
-              headerButtons={[
-                <Button variant='outlined' color='info'>
-                  创建任务
-                </Button>,
-              ]}
-            />
-          </Box>
-        </Grid>
-      </Grid>
+      <Routes>
+        <Route
+          path='/'
+          element={
+            <Grid container>
+              <Grid item xs={12}>
+                <Box pt={5} pb={1}>
+                  <JobTable
+                    title='任务列表'
+                    project={currentProject}
+                    loading={status.loading}
+                    rows={jobs}
+                    columns={config.columns}
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          }
+        />
+        <Route
+          path='/job/:id'
+          element={<JobDetail title='任务详细信息' project={currentProject} />}
+        />
+      </Routes>
     </View.AppLayout>
   );
 };
