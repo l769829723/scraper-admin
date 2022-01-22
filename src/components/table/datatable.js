@@ -57,7 +57,9 @@ function Datatable({
         <Grid item>
           {title ? (
             <Typography variant='h5' color='text.primary'>
-              <Box py={1}>{title}</Box>
+              <Box fontWeight={500} py={1}>
+                {title}
+              </Box>
             </Typography>
           ) : null}
         </Grid>
