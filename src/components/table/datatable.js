@@ -13,6 +13,7 @@ import {
   Typography,
   TableContainer,
 } from "@mui/material";
+import { Header } from "../../components";
 
 function TablePlaceholder({ title, description }) {
   return (
@@ -53,17 +54,9 @@ function Datatable({
 
   return (
     <Box>
-      <Grid container justifyContent='space-between'>
-        <Grid item>
-          {title ? (
-            <Typography variant='h5' color='text.primary'>
-              <Box fontWeight={500} py={1}>
-                {title}
-              </Box>
-            </Typography>
-          ) : null}
-        </Grid>
-        <Grid item>
+      <Header.MainTitle
+        title={title}
+        extra={
           <Grid container alignItems='flex-end' spacing={2}>
             <Grid item>
               <TextField
@@ -78,8 +71,8 @@ function Datatable({
 
             <Grid item>{headerButtons}</Grid>
           </Grid>
-        </Grid>
-      </Grid>
+        }
+      />
       <TableContainer component={Paper}>
         <Table>
           {description ? <caption>{description}</caption> : null}

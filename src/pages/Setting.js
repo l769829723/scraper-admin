@@ -13,6 +13,7 @@ import Select from "@mui/material/Select";
 import * as View from "../views";
 import Action from "../store/action";
 import * as Api from "../api";
+import { Header } from "../components";
 
 const SettingPage = ({ context, setContext }) => {
   const [host, setHost] = React.useState("localhost");
@@ -45,54 +46,65 @@ const SettingPage = ({ context, setContext }) => {
   return (
     <View.AppLayout pageId='Setting'>
       {status === "ERROR" ? <Alert severity='error'>{message}</Alert> : null}
-      <Paper elevation={0}>
-        <Box p={5}>
-          <Grid container spacing={1}>
-            <Grid xs={12} md={2} item>
-              <FormControl fullWidth>
-                <InputLabel htmlFor='schema-option'>Schema</InputLabel>
-                <Select
-                  size='small'
-                  labelId='schema-option'
-                  id='schema-option'
-                  value={schema}
-                  label='Schema'
-                  onChange={handleChangeSchema}
-                >
-                  {schemaOptions.map((schemaName, index) => (
-                    <MenuItem key={index} value={schemaName}>
-                      {schemaName}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid xs={12} md={9} item>
-              <FormControl fullWidth>
-                <TextField
-                  size='small'
-                  id='hostname-option'
-                  label='Hostname'
-                  variant='outlined'
-                  onChange={({ target }) => setHost(target.value.trim())}
-                  value={host}
-                />
-              </FormControl>
-            </Grid>
-            <Grid xs={12} md={1} item>
-              <Grid container justifyContent='flex-end'>
-                <Button
-                  variant='contained'
-                  onClick={handleSaveConfig}
-                  disabled={loading}
-                >
-                  Submit
-                </Button>
+      <Grid container>
+        <Grid item xs={12}>
+          <Header.MainTitle title='更新接口地址' />
+          <Paper elevation={0}>
+            <Box p={5}>
+              <Grid container spacing={1}>
+                <Grid xs={12} md={2} item>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor='schema-option'>Schema</InputLabel>
+                    <Select
+                      size='small'
+                      labelId='schema-option'
+                      id='schema-option'
+                      value={schema}
+                      label='Schema'
+                      onChange={handleChangeSchema}
+                    >
+                      {schemaOptions.map((schemaName, index) => (
+                        <MenuItem key={index} value={schemaName}>
+                          {schemaName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid xs={12} md={9} item>
+                  <FormControl fullWidth>
+                    <TextField
+                      size='small'
+                      id='hostname-option'
+                      label='Hostname'
+                      variant='outlined'
+                      onChange={({ target }) => setHost(target.value.trim())}
+                      value={host}
+                    />
+                  </FormControl>
+                </Grid>
+                <Grid xs={12} md={1} item>
+                  <Grid container justifyContent='flex-end'>
+                    <Button
+                      variant='contained'
+                      onClick={handleSaveConfig}
+                      disabled={loading}
+                    >
+                      Submit
+                    </Button>
+                  </Grid>
+                </Grid>
               </Grid>
-            </Grid>
-          </Grid>
-        </Box>
-      </Paper>
+            </Box>
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <Box pt={5}>
+            <Header.MainTitle title='系统默认配置清单' />
+            111
+          </Box>
+        </Grid>
+      </Grid>
     </View.AppLayout>
   );
 };

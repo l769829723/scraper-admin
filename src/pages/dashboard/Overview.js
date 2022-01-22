@@ -6,6 +6,7 @@ import Tabs from "@mui/material/Tabs";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import { Header } from "../../components";
 
 const Overview = ({
   title,
@@ -35,20 +36,7 @@ const Overview = ({
     <Box>
       <Grid container>
         <Grid item xs={12}>
-          <Grid container justifyContent='space-between' alignItems='center'>
-            <Grid item>
-              <Box py={1}>
-                <Typography variant='h5' color='text.primary'>
-                  <Box fontWeight={500}>{title}</Box>
-                </Typography>
-              </Box>
-            </Grid>
-            {extra && (
-              <Grid item>
-                <Box px={1}>{extra}</Box>
-              </Grid>
-            )}
-          </Grid>
+          <Header.MainTitle title={title} extra={extra} />
         </Grid>
         <Grid item xs={12}>
           <Paper square>
