@@ -36,7 +36,11 @@ export function useFetch() {
       dispatchUpdate(Action.ON_LOADING);
       const response = await fetch(url, {
         ...options,
-        headers: { ...options.headers, "Content-Type": "application/json" },
+        headers: {
+          ...options.headers,
+          "Content-Type": "application/json",
+          Origin: window.location.origin,
+        },
       });
       if (response.ok) {
         const data = await response.json();
